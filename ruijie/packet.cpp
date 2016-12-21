@@ -178,13 +178,13 @@ void packet::init_indentity(u_char *dst_mac, u_char id)
 		indentity_pkt.len = 0;
 	}
 
-	indentity_pkt.data = new u_char[14 + 4 + 5 + 8];
-	indentity_pkt.len = 14 + 4 + 5 + 8;
+	indentity_pkt.data = new u_char[14 + 4 + 5 + sizeof(username)];
+	indentity_pkt.len = 14 + 4 + 5 + sizeof(username) - 1;
 
 	u_char *pkt = indentity_pkt.data;
 	init_eth((_eth_hdr *)pkt, Mine, dst_mac);
 
-	u_short len = exAp(pkt + 14 + 4, 2, id, 1, (u_char *)username, 8);
+	u_short len = exAp(pkt + 14 + 4, 2, id, 1, (u_char *)username, sizeof(username) - 1);
 	init_eapol((eapol_header*)(pkt + 14), Packet, htons(len));
 }
 
